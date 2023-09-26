@@ -13,8 +13,8 @@ export default function UsersPage() {
   const handleFetchUsers = async () => {
     try {
       const data = await getUsers();
-      if (data && data?.data) {
-        setUsers(data.data);
+      if (data) {
+        setUsers(data);
         setLoading(false);
       }
     } catch (error) {
@@ -59,8 +59,9 @@ export default function UsersPage() {
       />
       {isCreate && (
         <Modal
+          isUser
           apiModal={createUser}
-          dataKey={HEADER_TABLE_USERS}
+          dataKey={["username", "password"]}
           onClose={handleCloseModal}
         />
       )}

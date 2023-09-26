@@ -4,8 +4,10 @@ export const generateYupSchema = (keys: string[]) => {
   const schemaObject: any = {};
 
   keys.forEach((key) => {
-    schemaObject[key] = yup.string().required(`${key} is required`);
+    if (key !== "icon") {
+      schemaObject[key] = yup.string().required(`${key} is required`);
+    }
   });
 
-  return yup.object({ schemaObject });
+  return yup.object().shape({ ...schemaObject });
 };

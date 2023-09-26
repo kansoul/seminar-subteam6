@@ -23,7 +23,7 @@ export interface AuthState {
 const resolveCurrentUserFromStorage = () => {
   // _location: api|localStorage
   const user: any = getSavedState(AUTHENTICATE_USER_KEY) || {};
-  user.location = "localStorage";
+  // user.location = "localStorage";
 
   return user;
 };
@@ -32,7 +32,7 @@ const initialState: AuthState = {
   currentUser: resolveCurrentUserFromStorage(),
   accessToken: getSavedState(AUTHENTICATE_TOKEN_KEY),
   // for case access token expired, so we need use isAuthenticated for checking instead of currentUser and accessToken
-  isAuthenticated: false,
+  isAuthenticated: true,
 };
 
 export const authSlice = createSlice({

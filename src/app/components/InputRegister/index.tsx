@@ -3,7 +3,7 @@ export default function InputRegister(props: {
   errMsg: any;
   isAutoFill: boolean;
   label: string;
-  name: string;
+  name?: string;
   type?: string;
   disabled?: boolean;
 }) {
