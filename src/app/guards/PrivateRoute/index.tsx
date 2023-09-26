@@ -15,10 +15,9 @@ export function PrivateRoute(props: any) {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   async function init() {
     if (
-      !(
-        Object.keys(accessToken).length === 0 &&
-        accessToken.constructor === Object
-      )
+      (Object.keys(accessToken).length === 0 &&
+        accessToken.constructor === Object) ||
+      !accessToken // check accessToken, nhưng mình remove rồi nên nên để access token là 1 account
     ) {
       return navigate(ROUTES.LOGIN);
     }
@@ -29,7 +28,7 @@ export function PrivateRoute(props: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return isAuthenticated ? (
+  return !isAuthenticated ? (
     <section className="flex items-center justify-center h-screen">
       Loading
     </section>
