@@ -15,7 +15,8 @@ export function PrivateRoute(props: any) {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   async function init() {
     if (
-      (Object.keys(accessToken).length === 0 &&
+      (accessToken &&
+        Object.keys(accessToken)?.length === 0 &&
         accessToken.constructor === Object) ||
       !accessToken // check accessToken, nhưng mình remove rồi nên nên để access token là 1 account
     ) {

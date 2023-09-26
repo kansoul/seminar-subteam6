@@ -34,9 +34,9 @@ export default function LoginPage() {
   const handleLogin = (data: any) => {
     setLoading(true);
     login(data)
-      .then((result: any) => {
-        dispatch(setAccessToken(result.data));
-        dispatch(setCurrentUser(result.data));
+      .then(() => {
+        dispatch(setAccessToken("login"));
+        dispatch(setCurrentUser("username"));
         dispatch(setIsAuthenticated(true));
         navigate("/");
       })

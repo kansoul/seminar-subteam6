@@ -13,8 +13,8 @@ export default function LinksPage() {
   const handleFetchLinks = async () => {
     try {
       const data = await getLink();
-      if (data && data?.data) {
-        setLinks(data.data);
+      if (data) {
+        setLinks(data);
         setLoading(false);
       }
     } catch (error) {

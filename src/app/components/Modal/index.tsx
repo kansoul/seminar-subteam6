@@ -2,13 +2,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import InputRegister from "../InputRegister";
 import { generateYupSchema } from "./config/validation";
+import { useState } from "react";
 
 export default function Modal(props: {
   onClose: (created?: boolean) => void;
   apiModal: any;
   dataKey: string[];
+  isUser?: boolean;
 }) {
-  const { onClose, apiModal, dataKey } = props;
+  const { onClose, apiModal, dataKey, isUser } = props;
+  const [iconImg, setIconImg] = useState<any>({});
   const handleDefaultValue = (arr: string[]) => {
     const obj = arr.reduce((acc: any, key) => {
       acc[key] = "";
@@ -27,14 +30,44 @@ export default function Modal(props: {
     defaultValues: handleDefaultValue(dataKey),
   });
 
+  const onImageChange = (event: any) => {
+    if (event.target.files[0]) {
+      const file = event.target.files[0];
+      let reader = new FileReader();
+      reader.onload = () => {
+        setIconImg({
+          ...iconImg,
+          img: reader.result,
+          file,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleCreateData = (data: any) => {
-    apiModal(data)
-      .then(() => {
-        onClose(true);
-      })
-      .catch(() => {
-        alert("Có lỗi xảy ra!");
+    if (isUser) {
+      apiModal(data)
+        .then(() => {
+          onClose(true);
+        })
+        .catch(() => {
+          alert("Có lỗi xảy ra!");
+        });
+    } else {
+      const formData = new FormData();
+      Object.keys(data).map((key) => {
+        formData.append(key, data[key]);
       });
+      formData.append("icon", iconImg.file);
+      apiModal(formData)
+        .then(() => {
+          onClose(true);
+        })
+        .catch(() => {
+          alert("Có lỗi xảy ra!");
+        });
+    }
   };
 
   return (
@@ -72,9 +105,9 @@ export default function Modal(props: {
         </div>
 
         <form className="px-12 mt-3" onSubmit={handleSubmit(handleCreateData)}>
-          {dataKey &&
-            dataKey.map((value) => (
-              <div className="mb-6">
+          {dataKey.map((value, index) => (
+            <div className="mb-6" key={index}>
+              {value !== "icon" ? (
                 <InputRegister
                   register={register}
                   errMsg={errors?.[value]?.message}
@@ -83,8 +116,28 @@ export default function Modal(props: {
                   name={value}
                   type={value === "password" ? "password" : "text"}
                 />
-              </div>
-            ))}
+              ) : (
+                <>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    icon
+                  </label>
+                  <input
+                    onChange={onImageChange}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="file"
+                  />
+                  {iconImg.img && (
+                    <img
+                      alt="demo"
+                      src={iconImg.img}
+                      width={200}
+                      height={200}
+                    />
+                  )}
+                </>
+              )}
+            </div>
+          ))}
           <div className="w-full flex justify-center">
             <button
               type="submit"
