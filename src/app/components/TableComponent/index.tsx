@@ -31,14 +31,18 @@ export default function TableComponent(props: {
                 >
                   {headerTable.map((val, idx) => (
                     <td className=" px-6 py-4" key={idx}>
-                      {val !== "icon" ? (
-                        value[val]
-                      ) : (
+                      {val === "icon" ? (
                         <img
                           src={`http://localhost:8081/${value["icon"]}`}
                           alt="icon"
                           width="200"
                         />
+                      ) : val === "url" ? (
+                        <a href={value["url"]} target={value.id}>
+                          Click to redirect link
+                        </a>
+                      ) : (
+                        value[val]
                       )}
                     </td>
                   ))}
